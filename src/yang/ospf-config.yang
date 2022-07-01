@@ -1,0 +1,61 @@
+module ospf-config {
+
+  namespace "http://example.com/ospf-config";
+  prefix ospf-config;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  description
+    "This is NSO service to manage OSPF config";
+
+  revision 2022-07-02 {
+    description
+      "version 1";
+  }
+
+  list ospf-config {
+    description "This defines a service instance";
+
+    key name;
+    leaf name {
+      tailf:info "Specify a unique name for your ospf service";
+      tailf:cli-allow-range;
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint ospf-config-servicepoint;
+    
+    leaf process_id {
+        type uint16;
+      }
+      
+  
+      leaf network {
+        type inet:ipv4-address;
+      }
+      leaf wildcard {
+        type inet:ipv4-address;
+      }
+      leaf area_id {
+        type uint32;
+      }
+    
+    // may replace this with other ways of refering to the devices.
+    leaf-list device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    // replace with your own stuff here
+  }
+}
